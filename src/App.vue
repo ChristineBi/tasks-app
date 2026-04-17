@@ -1,12 +1,16 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import TaskForm from '././components/TaskForm.vue';
 import type { Task, TaskFilter } from './types.ts';
 import TaskList from '././components/TaskList.vue';
 import FilterButton from '././components/FilterButton.vue';
 
 const message = ref("Tasks App");
-const tasks = ref<Task[]>([]);
+const tasks = ref<Task[]>(JSON.parse(localStorage.getItem('tasks') ?? '[]'));
+
+watch(tasks, (newTasks) => {
+  localStorage.setItem('tasks', JSON.stringify(newTasks));
+}, { deep: true });
 const filter = ref<TaskFilter>("all");
 
 const totalDone = computed(() => tasks
